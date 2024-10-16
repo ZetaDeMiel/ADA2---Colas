@@ -1,0 +1,69 @@
+class Cola:
+    def __init__(self):
+        self.cola = []
+        self.contador = 0 
+
+    def agregar_cliente(self):
+        self.contador += 1
+        self.cola.append(self.contador)
+        return self.contador
+
+    def atender_cliente(self):
+        if self.cola:
+            return self.cola.pop(0)
+        else:
+            return None 
+
+
+class SistemaSeguros:
+    def __init__(self):
+        self.servicios = {
+            1: 'Seguro de Auto',
+            2: 'Seguro de Salud',
+            3: 'Seguro de Hogar',
+            4: 'Seguro de Vida'
+        }
+        self.colas = {}
+
+    def procesar_entrada(self, entrada):
+        comando, servicio_id = entrada[0], entrada[1:]
+
+        servicio_id = int(servicio_id)
+
+        if servicio_id not in self.colas:
+            self.colas[servicio_id] = Cola()
+
+        if comando == 'C': 
+            numero_atencion = self.colas[servicio_id].agregar_cliente()
+            servicio_nombre = self.servicios.get(servicio_id, 'Servicio desconocido')
+            print(f"Cliente en {servicio_nombre}, número de atención asignado: {numero_atencion}")
+        elif comando == 'A':  
+            numero_llamado = self.colas[servicio_id].atender_cliente()
+            servicio_nombre = self.servicios.get(servicio_id, 'Servicio desconocido')
+            if numero_llamado:
+                print(f"Atendiendo al cliente {numero_llamado} de {servicio_nombre}")
+            else:
+                print(f"No hay clientes en la cola para {servicio_nombre}")
+
+sistema = SistemaSeguros()
+
+print("Bienvenido al sistema de atención de seguros.")
+print("Servicios disponibles:")
+print("1 - Seguro de Auto")
+print("2 - Seguro de Salud")
+print("3 - Seguro de Hogar")
+print("4 - Seguro de Vida")
+print("Comandos:")
+print("- Para registrar la llegada de un cliente: C seguido del número de servicio (ej. C1, C2)")
+print("- Para atender a un cliente: A seguido del número de servicio (ej. A1, A2)")
+print("- Para salir: Escriba 'S'")
+
+while True:
+    entrada = input("Ingrese un comando: ").strip().upper()
+    if entrada == 'S':
+        print("Saliendo del sistema...")
+        break
+    elif entrada.startswith(('C', 'A')) and len(entrada) > 1 and entrada[1:].isdigit():
+        sistema.procesar_entrada(entrada)
+    else:
+        print("Entrada no válida. Intente nuevamente.")
