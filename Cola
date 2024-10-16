@@ -1,0 +1,55 @@
+from collections import deque
+
+class Cola:
+    def __init__(self):
+        self.items = deque()
+
+    def encolar(self, item):
+        self.items.append(item)
+
+    def desencolar(self):
+        if not self.esta_vacia():
+            return self.items.popleft()
+        else:
+            return None
+
+    def esta_vacia(self):
+        return len(self.items) == 0
+
+    def tamanio(self):
+        return len(self.items)
+
+    def __str__(self):
+        return str(list(self.items))
+
+def sumar_colas(cola_a, cola_b):
+    cola_resultado = Cola()
+
+    while not cola_a.esta_vacia() and not cola_b.esta_vacia():
+        elemento_a = cola_a.desencolar()
+        elemento_b = cola_b.desencolar()
+        suma = elemento_a + elemento_b
+        cola_resultado.encolar(suma)
+
+    return cola_resultado
+
+def agregar_numeros(cola, nombre):
+    print(f"Introduce números para la {nombre}. Escribe 'fin' para terminar.")
+    while True:
+        valor = input(f"Introduce un número para la {nombre}: ")
+        if valor.lower() == 'fin':
+            break
+        try:
+            cola.encolar(int(valor))
+        except ValueError:
+            print("Por favor, introduce un número válido.")
+
+cola_a = Cola()
+cola_b = Cola()
+
+agregar_numeros(cola_a, "Cola A")
+agregar_numeros(cola_b, "Cola B")
+
+cola_resultado = sumar_colas(cola_a, cola_b)
+
+print("Cola Resultado:", cola_resultado)
